@@ -39,7 +39,9 @@ sexes = [person["sex"] for race in data["races"] for person in race["persons"]]
 # Count the number of occurrences for each age and sex combination
 count_dict = {}
 for age, sex in zip(ages, sexes):
-    age_group = math.floor(age / 5) * 5  # Group ages by 5-year intervals
+    if age < 0:
+        continue
+    age_group = math.floor(age/5)*5  # Group ages by 5-year intervals
     if (age_group, sex) in count_dict:
         count_dict[(age_group, sex)] += 1
     else:
