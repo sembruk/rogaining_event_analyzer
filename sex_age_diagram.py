@@ -34,7 +34,23 @@ print(title, event_date)
 birth_dates = [person["birth_date"] for race in data["races"] for person in race["persons"]]
 ages = [(event_date - datetime.strptime(birth_date if birth_date is not None else str(event_date), "%Y-%m-%d").date()).days // 365 for birth_date in birth_dates]
 
-sexes = [person["sex"] for race in data["races"] for person in race["persons"]]
+def predict_sex(name):
+    # Convert the name to lowercase for case-insensitivity
+    name_lower = name.lower()
+
+    # Check for common female name endings
+    if name_lower.endswith('а') or name_lower.endswith('я'):
+        return 2
+    else:
+        return 1
+
+sexes = []
+for race in data["races"]:
+    for person in race["persons"]:
+        sex = person["sex"] 
+        if sex == 0:
+            sex = predict_sex(person["name"])
+        sexes.append(sex)
 
 # Count the number of occurrences for each age and sex combination
 count_dict = {}
